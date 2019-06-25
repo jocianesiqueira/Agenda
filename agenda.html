@@ -1,0 +1,171 @@
+<html>
+	<head>
+		<title> Agenda </title>
+		<style>
+			#todosOsContatos div{
+				float:left;
+				border: solid 1px green;
+				margin:3px;
+				width:150px;
+				height:110px;
+				overflow:auto;
+				padding-left:5px;
+			}
+			
+			#divPagina{
+				width:80%;
+				margin:0 auto;
+				border:solid 1px black;
+				border-radius:5px;
+				min-height:500px;
+			}
+			
+			#divBanner{
+				height:180px;
+				background:url(imagens/banner.png) no-repeat;
+				background-position:300,10;
+				background-size:50,100;
+				
+			}
+		</style>	
+		<script language="javascript">
+		// define contatos e variedades
+			function contato()
+			{
+				this.nome = "";
+				this.apelido = "";
+				this.telefone = "";
+				this.email = "";
+			}
+			
+			//variaveis para alcançar cada instancias dos contatos			
+				var contatos = new Array();
+			
+			//abreviatura de document.getElementById
+					function gi(id){
+				return document.getElementById(id);
+			}
+			
+			//função que mostra formulario para adicionar
+			function adicionarContato(){
+				gi("divFormulario").style.display='inline';
+				gi('txtNome').focus()
+			}
+			
+			//função que oculta
+			function ocultarForm(){
+				gi('txtNome').value = '';
+				gi('txtApelido').value = '';
+				gi('txtTelefone').value = '';
+				gi('txtEmail').value = '';
+				gi("divFormulario").style.display='none';
+			}
+			
+			//função que adicionar novo contato
+			function guardar(){
+			con = new contato();
+				con.nome = gi('txtNome').value;
+				con.apelido = gi('txtApelido').value;
+				con.telefone = gi('txtTelefone').value;
+				con.email = gi('txtEmail').value;
+				contatos[contatos.length] = con;
+				ocultarForm();
+				mostrarContatos();
+			}
+			
+			function deletarConfirmando(id_contato){
+				if(confirm("Tem certeza que deseja deletar esse contato")){
+				deletar(id_contato);
+				}
+			}
+			
+			function deletar(id_contato){
+			
+				newCon = new Array();
+				for(x=0; x<contatos.length; x++){
+					if(x != id_contato){
+						newCon[newCon.length] = contatos[x];
+					}
+				}
+				contatos = newCon;
+				mostrarContatos();
+			
+		}
+		
+			function editar(id_contato){
+				con = contatos[id_contato];
+				deletar(id_contato);
+				adicionarContato();
+				gi('txtNome').value = con.nome;
+				gi('txtApelido').value = con.apelido;
+				gi('txtTelefone').value = con.telefone;
+				gi('txtEmail').value = con.email;
+			}
+			
+			function mostrarContatos(){
+				gi('todosOsContatos').innerHTML = '';
+				for(x=0; x<contatos.length; x++){
+					con = contatos[x];
+					div = document.createElement('div');
+					div.setAttribute('class','contato');
+					div.innerHTML = 
+					"nome:" +con.nome+"<br/>"+
+					"apelido:" +con.apelido + "<br/>"+
+					"telefone:" +con.telefone + "<br/>"+
+					"email:" +con.email + "<br/>"+
+					"<button onclick='editar("+x+")'>Editar</button><button onclick='deletarConfirmando("+x+")'>Deletar</button>"
+					
+					gi('todosOsContatos').appendChild(div);
+				}
+			}
+		 
+		 </script>
+	</head>
+	<body>
+		<div id="divPagina">
+			<div id="divBanner">
+			
+		</div>
+		<div id="divCentro">
+		
+		
+		<div id="panel_Acciones">
+			<button onclick="adicionarContato();">Adicionar Contato</button>
+			<button onclick="mostrarContatos();">Atualizar</button>
+		</div>
+		<div id="divFormulario" style="display:none;">
+			<table>
+				<tr>
+					<th>Nome:</th>
+					<td><input type="text" id="txtNome"/></td>
+				</tr>
+				<tr>
+					<th>Apelido:</th>
+					<td><input type="text" id="txtApelido"/></td>
+				</tr>
+				<tr>
+					<th>Telefone:</th>
+					<td><input type="text" id="txtTelefone"/></td>
+				</tr>
+				<tr>
+					<th>Email:</th>
+					<td><input type="text" id="txtEmail"/></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<button onclick="guardar();">Guardar</button>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<fieldset>
+			<legend>Contatos Existentes</legend>
+			<div id="todosOsContatos">
+			
+			</div>
+		</fieldset>
+		
+			</div>
+		</div>
+	</body>
+</html>
